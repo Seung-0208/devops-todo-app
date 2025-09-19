@@ -88,6 +88,8 @@
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Delete';
+                deleteBtn.type = 'button';
+                deleteBtn.classList.add('btn', 'btn-outline-danger');
                 deleteBtn.id = `delete_${todo.id}`;
 
                 deleteBtn.onclick = async(e) => {
