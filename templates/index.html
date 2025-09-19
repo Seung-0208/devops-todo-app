@@ -4,15 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
+    <style> 
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #eeecfc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    .card {
+        width: 80%; 
+        /* margin: 20px auto;  */
+        padding: 16px; 
+        border: 1px solid #ddd; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 6px rgba(73, 73, 73, 0.1); 
+        background-color: #fff; 
+        font-family: Arial, sans-serif; 
+        display: flex; 
+        justify-content: center; 
+        flex-direction: column;
+        align-items: center; 
+        gap: 70px;
+    } 
+    </style> 
 </head>
 <body>
-    <h1>To-Do List</h1>
-    <ul id="todo-list"></ul>
-    <form id="todo-form">
-        <input type="text" id="title" placeholder="Title" required>
-        <input type="text" id="description" placeholder="Description" required>
-        <button type="submit">Add To-Do</button>
-    </form>
+    <div class="card">
+        <h1>To-Do List</h1>
+        <ul id="todo-list"></ul>
+        <form id="todo-form">
+            <input type="text" id="title" placeholder="Title" required>
+            <input type="text" id="description" placeholder="Description" required>
+            <button type="submit">Add To-Do</button>
+        </form>
+    </div>
     <script>
         async function fetchTodos() {
             const response = await fetch('/todos');
@@ -22,7 +52,7 @@
             todos.forEach(todo => {
                 
                 const li = document.createElement('li');
-                li.textContent = `${todo.title}: ${todo.description}(Completed:${todo.completed})`;
+                li.textContent = `${todo.title}: ${todo.description}(Completed:${todo.completed}) `;
                 const editBtn = document.createElement('button');
                 editBtn.textContent = 'Edit';
                 editBtn.id = `edit_${todo.id}`;
