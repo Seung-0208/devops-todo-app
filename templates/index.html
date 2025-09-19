@@ -100,6 +100,7 @@
                 deleteBtn.type = 'button';
                 deleteBtn.classList.add('btn', 'btn-outline-danger');
                 deleteBtn.id = `delete_${todo.id}`;
+                deleteBtn.style.height='29px';
 
                 deleteBtn.onclick = async(e) => {
                     const isDelete = confirm('해당 항목을 삭제하시겠습니까?');
