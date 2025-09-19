@@ -57,7 +57,9 @@
                 const editBtn = document.createElement('button');
                 editBtn.textContent = 'Edit';
                 editBtn.id = `edit_${todo.id}`;
+                
                 editBtn.type = 'button';
+                editBtn.classList.add('btn');
                 
                 editBtn.onclick = async(e) => {
                     const isEdit = confirm('해당 항목을 수정하시겠습니까?');
