@@ -54,6 +54,7 @@
                 
                 const li = document.createElement('li');
                 li.textContent = `${todo.title}: ${todo.description}(Completed:${todo.completed}) `;
+                li.style.marginTop = '10px';
                 const editBtn = document.createElement('button');
                 editBtn.textContent = 'Edit';
                 editBtn.id = `edit_${todo.id}`;
