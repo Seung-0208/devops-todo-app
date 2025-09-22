@@ -47,8 +47,7 @@
             <h1>
                 To-Do List
             </h1>
-            <span class="position-absolute top-0 start-100 translate-middle badge text-bg-secondary" style="margin-left: 30px;">
-                99+
+            <span id="list-count" class="position-absolute top-0 start-100 translate-middle badge text-bg-secondary" style="margin-left: 30px;">
             </span>
         </div>
         <ul id="todo-list"></ul>
@@ -71,6 +70,9 @@
             const response = await fetch('/todos');
             const todos = await response.json();
             const todoList = document.getElementById('todo-list');
+            const t = [1,2,3];
+
+            document.getElementById('list-count').innerHTML = `total ${todos.length}개`;
             todoList.innerHTML = '';
             todos.forEach(todo => {
                 
