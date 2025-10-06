@@ -83,8 +83,21 @@
             todos.forEach(todo => {
                 
                 const li = document.createElement('li');
-                li.textContent = `${todo.title}: ${todo.description}(Completed:${todo.completed}) `;
+                // li.textContent = `${todo.title}: ${todo.description}(Completed:${todo.completed}) `;
                 li.style.marginTop = '10px';
+                
+                // 체크박스 생성
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = !!todo.completed;
+                checkbox.style.marginRight = '8px';
+
+                // 텍스트 노드 생성 (초기 표시)
+                const textNode = document.createTextNode(`${todo.title}: ${todo.description} (Completed: ${todo.completed})`);
+
+                li.appendChild(checkbox);
+                li.appendChild(textNode);
+
                 const editBtn = document.createElement('button');
                 editBtn.textContent = 'Edit';
                 editBtn.id = `edit_${todo.id}`;
