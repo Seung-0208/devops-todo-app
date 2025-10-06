@@ -1,23 +1,23 @@
- import sys
- import os
- sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
- import pytest
- from fastapi.testclient import testclient
- from main import app, save_todos, load_todos, TodoItem
+import pytest
+from fastapi.testclient import testclient
+from main import app, save_todos, load_todos, TodoItem
 
- client = TestClient(app)
+client = TestClient(app)
 
- #테스트가 명시적으로 그 픽스처를 인자로 요구하지 않아도 자동으로 적용되게 만드는 옵션
- #원래는 테스트 함수에 픽스처를 넘겨줘야 함
- #❔fixture란; 테스트가 돌기 전 필요한 준비를 해주고 끝난 뒤에는 정리해주는 재사용 가능 함수
- @pytest.fixture(autouse=True)
- def setup_and_teardown():
-     # 테스트 전: 빈 todo.json 파일 생성
-     save_todos([])
-     yield
-     # 테스트 후 정리
-     save_todos([])
+#테스트가 명시적으로 그 픽스처를 인자로 요구하지 않아도 자동으로 적용되게 만드는 옵션
+#원래는 테스트 함수에 픽스처를 넘겨줘야 함
+#❔fixture란; 테스트가 돌기 전 필요한 준비를 해주고 끝난 뒤에는 정리해주는 재사용 가능 함수
+@pytest.fixture(autouse=True)
+def setup_and_teardown():
+    # 테스트 전: 빈 todo.json 파일 생성
+    save_todos([])
+    yield
+    # 테스트 후 정리
+    save_todos([])
 
 def test_get_todos_empty():
     response = client.get('/todos')
