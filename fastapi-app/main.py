@@ -75,3 +75,9 @@ def read_root():
     with open("templates/index.html", "r", encoding="utf-8") as file:
         content = file.read()
     return HTMLResponse(content=content)
+
+@app.get("/report", response_class=HTMLResponse)
+def read_report():
+    with open("../pytest_report/report.html", "r", encoding="utf-8") as file:
+        content = file.read()
+    return HTMLResponse(content=content)
