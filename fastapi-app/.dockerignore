@@ -22,7 +22,6 @@ keys/
 *.pem
 *.key
 *.crt
-*.json
 
 # IDE / Test / Cache
 .idea/
