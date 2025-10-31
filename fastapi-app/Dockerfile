@@ -11,7 +11,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # 의존성 설치
-RUN pip install --no-cache-dir --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 ENV PATH="/home/appuser/.local/bin:$PATH"
 
 # 필요한 파일 복사
