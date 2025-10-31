@@ -1,0 +1,34 @@
+# 기본 빌드 제외 파일
+.git
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.csv
+*.png
+*.jpg
+*.jpeg
+*.mp4
+*.avi
+
+# 환경 설정 / 민감 데이터
+.env
+secret/
+keys/
+*.pem
+*.key
+*.crt
+*.json
+
+# IDE / Test / Cache
+.idea/
+.vscode/
+pytest_cache/
+htmlcov/
+dist/
+build/
+node_modules/
