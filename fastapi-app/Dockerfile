@@ -20,8 +20,5 @@ COPY todo.json .
 
 USER appuser
 
-ENV PATH="/home/appuser/.local/bin:${PATH}"
-EXPOSE 8000
-
 # FastAPI 서버 실행
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
