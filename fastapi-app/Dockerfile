@@ -22,4 +22,4 @@ COPY todo.json .
 USER appuser
 
 # FastAPI 서버 실행 poetry run 
-CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
