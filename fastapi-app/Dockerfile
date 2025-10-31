@@ -19,7 +19,9 @@ COPY --chown=appuser:appgroup --chmod=644 requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 # 필요한 파일 복사
-COPY --chown=appuser:appgroup --chmod=755 . .
+COPY --chown=appuser:appgroup --chmod=755 main.py .
+COPY --chown=appuser:appgroup --chmod=755 templates/ ./templates/
+COPY --chown=appuser:appgroup --chmod=755 todo.json .
 
 USER appuser
 
