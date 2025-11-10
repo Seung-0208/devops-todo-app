@@ -10,4 +10,4 @@ scrape_configs:
       - targets: ['node-exporter:9100']
   - job_name: 'cadvisor' #시스템 메트릭 수집 !
     static_configs:
-      - targets: ['cadvisor-exporter:9200']
+      - targets: ['cadvisor-exporter:8080']

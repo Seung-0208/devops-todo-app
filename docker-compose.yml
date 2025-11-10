@@ -44,15 +44,17 @@ services:
     ports:
       - "7100:9100"
   cadvisor-exporter: #시스템의 CPU, 메모리, 디스크, 네트워크 등 다양한 메트릭 제공
-    image: google/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor-exporter
     ports:
-      - "7200:9200"
+      - "7200:8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
     restart: unless-stopped
 
 volumes:
