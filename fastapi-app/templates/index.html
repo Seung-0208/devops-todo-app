@@ -95,6 +95,26 @@
                 // 텍스트 노드 생성 (초기 표시)
                 const textNode = document.createTextNode(`${todo.title}: ${todo.description} (Completed: ${todo.completed})`);
 
+                checkbox.addEventListener('change', async () => {
+                    const updatedTodo = { ...todo, completed: checkbox.checked };
+                    const response = await fetch(`/todos/${todo.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedTodo)
+                    });
+
+                    if (!response.ok) {
+                        alert('상태를 업데이트하지 못했습니다. 다시 시도해주세요.');
+                        checkbox.checked = !checkbox.checked;
+                        return;
+                    }
+
+                    textNode.textContent = `${updatedTodo.title}: ${updatedTodo.description} (Completed: ${updatedTodo.completed})`;
+                    await fetchTodos();
+                });
+
                 li.appendChild(checkbox);
                 li.appendChild(textNode);
 
