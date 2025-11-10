@@ -43,6 +43,12 @@ services:
     container_name: node-exporter
     ports:
       - "7100:9100"
+  cadvisor-exporter: #시스템의 CPU, 메모리, 디스크, 네트워크 등 다양한 메트릭 제공
+    image: google/cadvisor:latest
+    container_name: cadvisor-exporter
+    ports:
+      - "7200:9200"
+  
 
 volumes:
   sonarqube_conf:
