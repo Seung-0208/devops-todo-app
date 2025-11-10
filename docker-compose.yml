@@ -48,7 +48,12 @@ services:
     container_name: cadvisor-exporter
     ports:
       - "7200:9200"
-  
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: unless-stopped
 
 volumes:
   sonarqube_conf:
