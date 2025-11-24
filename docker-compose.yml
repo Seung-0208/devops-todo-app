@@ -7,7 +7,30 @@ services:
       dockerfile: Dockerfile      # Dockerfile 이름 (생략 가능, 기본값은 'Dockerfile')
     container_name: FastApi-app-LSY
     ports:
-      - "8000:8000"
+      - "5001:5001"
+    networks:
+      - loadtest-net
+  jmeter:
+    build:
+      context: ./jmeter
+      dockerfile: Dockerfile
+    container_name: jmeter
+    volumes:
+      - ./jmeter:/jmeter
+    command:
+      - jmeter
+      - -n
+      - -t
+      - /jmeter/fastapi_test_plan.jmx
+      - -l
+      - /jmeter/results.jtl
+      - -JBASE_URL=http://fastapi-app:5001
+      - -Jjmeter.save.saveservice.output_format=csv
+      - -e
+      - -o
+      - /jmeter/report
+    networks:
+      - loadtest-net
   sonarqube:
     image: sonarqube:latest
     container_name: sonarqube
@@ -20,6 +43,8 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_extensions:/opt/sonarqube/extensions
+    networks:
+      - loadtest-net
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -29,6 +54,8 @@ services:
       - "7070:9090"
     command: 
       - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - loadtest-net
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -38,11 +65,15 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin # 그라파나 기본 비밀번호
     volumes:
       - grafana-data:/var/lib/grafana
+    networks:
+      - loadtest-net
   node-exporter: #시스템의 CPU, 메모리, 디스크, 네트워크 등 다양한 메트릭 제공
     image: prom/node-exporter:latest
     container_name: node-exporter
     ports:
       - "7100:9100"
+    networks:
+      - loadtest-net
   cadvisor-exporter: #시스템의 CPU, 메모리, 디스크, 네트워크 등 다양한 메트릭 제공
     image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor-exporter
@@ -56,6 +87,12 @@ services:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     restart: unless-stopped
+    networks:
+      - loadtest-net
+
+networks:
+  loadtest-net:
+    driver: bridge
 
 volumes:
   sonarqube_conf:
