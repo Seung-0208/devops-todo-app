@@ -25,7 +25,7 @@ RUN wget https://repo1.maven.org/maven2/kg/apc/cmdrunner/2.2/cmdrunner-2.2.jar \
     -O ${JMETER_HOME}/lib/cmdrunner-2.2.jar
 
 ### ⭐ Install InfluxDB Backend Listener plugin with PluginManagerCMD
-RUN java -cp "${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar:${JMETER_HOME}/lib/cmdrunner-2.2.jar" \
+RUN java -cp "${JMETER_HOME}/lib/ext/jmeter-plugins-manager-1.11.jar:${JMETER_HOME}/lib/cmdrunner-2.2.jar" \
     org.jmeterplugins.repository.PluginManagerCMD install jpgc-influxdb
 
 # Set the working directory
