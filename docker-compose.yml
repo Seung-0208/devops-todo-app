@@ -95,8 +95,5 @@ networks:
     driver: bridge
 
 volumes:
-  sonarqube_conf:
-  sonarqube_data:
-  sonarqube_logs:
-  sonarqube_extensions:
   grafana-data:
+  influxdb-data:
