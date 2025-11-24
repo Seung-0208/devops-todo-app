@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'   // DockerHub 자격증명 ID
         IMAGE_NAME            = 'seung0208/fastapi-app' // 빌드·푸시할 이미지 이름
         REMOTE_USER           = 'ubuntu'                 // 배포 대상 서버 유저
-        REMOTE_HOST           = '3.36.137.92'              // 배포 대상 서버 호스트
+        REMOTE_HOST           = '13.124.109.82'              // 배포 대상을 팀 서버로 변경
         REMOTE_PATH           = '/home/ubuntu'           // 배포용 디렉토리
         COMPOSE_FILE          = 'docker-compose.yml'
         SONAR_TOKEN           = credentials('sonar-token')
@@ -89,7 +89,7 @@ pipeline {
                                 mkdir -p report
                                 jmeter -n \
                                        -t fastapi_test_plan.jmx \
-                                       -JBASE_URL=http://localhost:5001 \
+                                       -JBASE_URL=http://13.124.109.82:8003 \
                                        -l results.jtl \
                                        -Jjmeter.save.saveservice.output_format=csv \
                                        -e -o report
