@@ -10,25 +10,19 @@ services:
       - "5001:5001"
     networks:
       - loadtest-net
-  jmeter:
-    build:
-      context: ./jmeter
-      dockerfile: Dockerfile
-    container_name: jmeter
+  # 컨테이너의 순서 중요함
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=jmeter
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin123
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
     volumes:
-      - ./jmeter:/jmeter
-    command:
-      - jmeter
-      - -n
-      - -t
-      - /jmeter/fastapi_test_plan.jmx
-      - -l
-      - /jmeter/results.jtl
-      - -JBASE_URL=http://fastapi-app:5001
-      - -Jjmeter.save.saveservice.output_format=csv
-      - -e
-      - -o
-      - /jmeter/report
+      - influxdb-data:/var/lib/influxdb
     networks:
       - loadtest-net
   prometheus:
@@ -75,18 +69,25 @@ services:
     restart: unless-stopped
     networks:
       - loadtest-net
-  influxdb:
-    image: influxdb:1.8
-    container_name: influxdb
-    ports:
-      - "8086:8086"
-    environment:
-      - INFLUXDB_DB=jmeter
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin123
-      - INFLUXDB_HTTP_AUTH_ENABLED=true
+  jmeter:
+    build:
+      context: ./jmeter
+      dockerfile: Dockerfile
+    container_name: jmeter
     volumes:
-      - influxdb-data:/var/lib/influxdb
+      - ./jmeter:/jmeter
+    command:
+      - jmeter
+      - -n
+      - -t
+      - /jmeter/fastapi_test_plan.jmx
+      - -l
+      - /jmeter/results.jtl
+      - -JBASE_URL=http://fastapi-app:5001
+      - -Jjmeter.save.saveservice.output_format=csv
+      - -e
+      - -o
+      - /jmeter/report
     networks:
       - loadtest-net
 
