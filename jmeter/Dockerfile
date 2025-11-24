@@ -17,9 +17,15 @@ RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_
     tar -xzf apache-jmeter-${JMETER_VERSION}.tgz -C /opt/ && \
     rm apache-jmeter-${JMETER_VERSION}.tgz
 
-# InfluxDB Backend Listener Plugin 설치
-RUN wget https://jmeter-plugins.org/files/packages/jmeter-influxdb-backend-listener-1.2.1.jar \
-    -O ${JMETER_HOME}/lib/ext/jmeter-influxdb-backend-listener-1.2.1.jar
+### ⭐ Install JMeter Plugins Manager
+RUN wget https://jmeter-plugins.org/get/ \
+    -O ${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar
+
+RUN wget https://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-manager/1.10/jmeter-plugins-manager-1.10.jar \
+    -O ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-1.10.jar
+
+### ⭐ Command to install InfluxDB Backend Listener Plugin
+RUN java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar org.jmeterplugins.repository.PluginManagerCMD install jpgc-influxdb2-listener
 
 # Set the working directory
 WORKDIR ${JMETER_HOME}
