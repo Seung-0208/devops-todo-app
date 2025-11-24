@@ -17,6 +17,17 @@ class TodoItem(BaseModel):
     description: str
     completed: bool
 
+
+def model_to_dict(model: BaseModel) -> dict:
+    """Return a dict representation of a Pydantic model supporting v1 and v2.
+
+    - Pydantic v2: `model_dump()`
+    - Pydantic v1: `dict()`
+    """
+    if hasattr(model, "model_dump"):
+        return model.model_dump()
+    return model.dict()
+
 # JSON 파일 경로
 TODO_FILE = "todo.json"
 
@@ -41,7 +52,7 @@ def get_todos():
 @app.post("/todos", response_model=TodoItem)
 def create_todo(todo: TodoItem):
     todos = load_todos()
-    todos.append(todo.dict())
+    todos.append(model_to_dict(todo))
     save_todos(todos)
     return todo
 
@@ -51,7 +62,7 @@ def update_todo(todo_id: int, updated_todo: TodoItem):
     todos = load_todos()
     for todo in todos:
         if todo["id"] == todo_id:
-            todo.update(updated_todo.dict())
+            todo.update(model_to_dict(updated_todo))
             save_todos(todos)
             return updated_todo
     raise HTTPException(status_code=404, detail="To-Do item not found")

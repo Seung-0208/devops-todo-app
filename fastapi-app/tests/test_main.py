@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 import pytest
 from fastapi.testclient import TestClient
-from main import app, save_todos, load_todos, TodoItem
+from main import app, save_todos, load_todos, TodoItem, model_to_dict
 
 client = TestClient(app)
 
@@ -26,7 +26,7 @@ def test_get_todos_empty():
 
 def test_get_todos_with_items():
     todo = TodoItem(id=1, title="Test", description="Test Description", completed=False)
-    save_todos([todo.dict()])
+    save_todos([model_to_dict(todo)])
     response = client.get("/todos")
     assert response.status_code == 200
     assert len(response.json()) == 1
@@ -45,7 +45,7 @@ def test_create_todo_invalid():
 
 def test_update_todo():
     todo = TodoItem(id=1, title="Test", description="Test description", completed=False)
-    save_todos([todo.dict()])
+    save_todos([model_to_dict(todo)])
     updated_todo = {"id": 1, "title": "Updated", "description": "Updated description", "completed": True}
     response = client.put("/todos/1", json=updated_todo)
     assert response.status_code == 200
@@ -58,14 +58,14 @@ def test_update_todo_not_found():
     
 def test_update_todo_invalid():
     todo = TodoItem(id=1, title="Test", description="Test description", completed=False)
-    save_todos([todo.dict()])
+    save_todos([model_to_dict(todo)])
     updated_todo = {"id": 1, "title": "Updated"}
     response = client.put("/todos/1", json=updated_todo)
     assert response.status_code == 422
 
 def test_delete_todo():
     todo = TodoItem(id=1, title="Test", description="Test description", completed=False)
-    save_todos([todo.dict()])
+    save_todos([model_to_dict(todo)])
     response = client.delete("/todos/1")
     assert response.status_code == 200
     assert response.json()["message"] == "To-Do item deleted"
