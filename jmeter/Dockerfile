@@ -17,17 +17,16 @@ RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_
     tar -xzf apache-jmeter-${JMETER_VERSION}.tgz -C /opt/ && \
     rm apache-jmeter-${JMETER_VERSION}.tgz
 
-### 🌟 Install JMeter Plugins Manager
-RUN wget https://jmeter-plugins.org/get \
-    -O ${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar
+### ⭐ Install Plugins Manager (정식 방식)
+RUN wget https://jmeter-plugins.org/get/ -O ${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar
 
-### 🌟 Install cmdrunner (필수!)
+### ⭐ Install cmdrunner (필수)
 RUN wget https://repo1.maven.org/maven2/kg/apc/cmdrunner/2.2/cmdrunner-2.2.jar \
     -O ${JMETER_HOME}/lib/cmdrunner-2.2.jar
 
-### 🌟 PluginManagerCMD로 InfluxDB Listener 설치
+### ⭐ Install InfluxDB Backend Listener plugin with PluginManagerCMD
 RUN java -cp "${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar:${JMETER_HOME}/lib/cmdrunner-2.2.jar" \
-    org.jmeterplugins.repository.PluginManagerCMD install jpgc-influxdb2-listener
+    org.jmeterplugins.repository.PluginManagerCMD install jpgc-influxdb
 
 # Set the working directory
 WORKDIR ${JMETER_HOME}
