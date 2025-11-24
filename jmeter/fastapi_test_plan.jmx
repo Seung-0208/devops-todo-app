@@ -132,6 +132,16 @@
                 <stringProp name="Argument.desc">InfluxDB write URL</stringProp>
               </elementProp>
 
+              <elementProp name="username" elementType="Argument">
+                <stringProp name="Argument.name">username</stringProp>
+                <stringProp name="Argument.value">admin</stringProp>
+              </elementProp>
+
+              <elementProp name="password" elementType="Argument">
+                <stringProp name="Argument.name">password</stringProp>
+                <stringProp name="Argument.value">admin123</stringProp>
+              </elementProp>
+
               <elementProp name="application" elementType="Argument">
                 <stringProp name="Argument.name">application</stringProp>
                 <stringProp name="Argument.value">fastapi-perf-test</stringProp>
