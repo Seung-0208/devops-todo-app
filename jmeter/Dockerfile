@@ -18,7 +18,7 @@ RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_
     rm apache-jmeter-${JMETER_VERSION}.tgz
 
 ### 🌟 Install JMeter Plugins Manager
-RUN wget https://jmeter-plugins.org/files/packages/jmeter-plugins-manager-1.10.jar \
+RUN wget https://jmeter-plugins.org/get \
     -O ${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar
 
 ### 🌟 Install cmdrunner (필수!)
