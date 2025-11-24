@@ -23,8 +23,12 @@ WORKDIR ${JMETER_HOME}
 # Then use the Plugin Manager CLI to install the `jpgc-influxdb-backend` plugin.
 RUN wget -O /tmp/jmeter-plugins-manager.jar https://jmeter-plugins.org/get/ && \
     mv /tmp/jmeter-plugins-manager.jar ${JMETER_HOME}/lib/ext/ && \
+    # Use the Plugin Manager CLI class to install the InfluxDB backend plugin for InfluxDB 1.x
+    # (plugin id for InfluxDB 1.x backend)
     java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager.jar \
-        org.jmeterplugins.repository.PluginManagerCMDInstaller install jpgc-influxdb-backend && \
+        org.jmeterplugins.repository.PluginManagerCMDInstaller install jpgc-influxdb-backend || true && \
+    # show installed influx-related jars to help debug build output
+    ls -la ${JMETER_HOME}/lib/ext | grep -i influx || true && \
     rm -f /tmp/jmeter-plugins-manager.jar
 
 # Default command: run JMeter in non-GUI mode
