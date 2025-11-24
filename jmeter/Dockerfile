@@ -17,6 +17,10 @@ RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_
     tar -xzf apache-jmeter-${JMETER_VERSION}.tgz -C /opt/ && \
     rm apache-jmeter-${JMETER_VERSION}.tgz
 
+# InfluxDB Backend Listener Plugin 설치
+RUN wget https://jmeter-plugins.org/files/packages/jmeter-influxdb-backend-listener-1.2.1.jar \
+    -O ${JMETER_HOME}/lib/ext/jmeter-influxdb-backend-listener-1.2.1.jar
+
 # Set the working directory
 WORKDIR ${JMETER_HOME}
 
