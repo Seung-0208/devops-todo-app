@@ -117,6 +117,8 @@
 
         <!-- Backend Listener: InfluxDB -->
         <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="InfluxDB Backend Listener" enabled="true">
+          <stringProp name="classname">org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient</stringProp>
+          <!-- classname을 추가하여 Backend Listener가 InfluxDB 전송 클라이언트를 사용하도록 설정 -->
           <elementProp name="arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
 
