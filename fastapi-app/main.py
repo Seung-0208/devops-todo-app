@@ -3,12 +3,48 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import json
 import os
+import logging
+import time
+from multiprocessing import Queue
+from os import getenv
+from fastapi import Request
 from prometheus_fastapi_instrumentator import Instrumentator
+from logging_loki import LokiQueueHandler
+
 
 app = FastAPI()
 
-# Prometheus 메트릭 수집기 설정
+# Prometheus 메트릭스 엔드포인트 (/metrics)
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
+
+loki_logs_handler = LokiQueueHandler(
+    Queue(-1),
+    url=getenv("LOKI_ENDPOINT"),
+    tags={"application": "fastapi"},
+    version="1",
+)
+
+# Custom access logger (ignore Uvicorn's default logging)
+custom_logger = logging.getLogger("custom.access")
+custom_logger.setLevel(logging.INFO)
+
+# Add Loki handler (assuming `loki_logs_handler` is correctly configured)
+custom_logger.addHandler(loki_logs_handler)
+
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    duration = time.time() - start_time  # Compute response time
+
+    log_message = (
+        f'{request.client.host} - "{request.method} {request.url.path} HTTP/1.1" {response.status_code} {duration:.3f}s'
+    )
+
+    # **Only log if duration exists**
+    if duration:
+        custom_logger.info(log_message)
+
+    return response
 
 # To-Do 항목 모델
 class TodoItem(BaseModel):
@@ -16,17 +52,6 @@ class TodoItem(BaseModel):
     title: str
     description: str
     completed: bool
-
-
-def model_to_dict(model: BaseModel) -> dict:
-    """Return a dict representation of a Pydantic model supporting v1 and v2.
-
-    - Pydantic v2: `model_dump()`
-    - Pydantic v1: `dict()`
-    """
-    if hasattr(model, "model_dump"):
-        return model.model_dump()
-    return model.dict()
 
 # JSON 파일 경로
 TODO_FILE = "todo.json"
@@ -52,7 +77,7 @@ def get_todos():
 @app.post("/todos", response_model=TodoItem)
 def create_todo(todo: TodoItem):
     todos = load_todos()
-    todos.append(model_to_dict(todo))
+    todos.append(todo.dict())
     save_todos(todos)
     return todo
 
@@ -62,19 +87,10 @@ def update_todo(todo_id: int, updated_todo: TodoItem):
     todos = load_todos()
     for todo in todos:
         if todo["id"] == todo_id:
-            todo.update(model_to_dict(updated_todo))
+            todo.update(updated_todo.dict())
             save_todos(todos)
             return updated_todo
-    raise HTTPException(status_code=404, detail="To-Do item not found")
-
-# 특정 아이디의 To-Do 정보 가져오기
-@app.get("/todos/{todo_id}")
-def get_spicific_todo(todo_id: int):
-    todos = load_todos()
-    for item in todos:
-        if item['id'] == todo_id:
-            print(item)
-            return item
+    raise HTTPException(status_code=404, detail="To-Do item not found!!!_SJ")
 
 # To-Do 항목 삭제
 @app.delete("/todos/{todo_id}", response_model=dict)
@@ -87,12 +103,6 @@ def delete_todo(todo_id: int):
 # HTML 파일 서빙
 @app.get("/", response_class=HTMLResponse)
 def read_root():
-    with open("templates/index.html", "r", encoding="utf-8") as file:
-        content = file.read()
-    return HTMLResponse(content=content)
-
-@app.get("/report", response_class=HTMLResponse)
-def read_report():
-    with open("../pytest_report/report.html", "r", encoding="utf-8") as file:
+    with open("templates/index.html", "r") as file:
         content = file.read()
     return HTMLResponse(content=content)
