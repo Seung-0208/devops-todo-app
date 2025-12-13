@@ -1,0 +1,49 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ap-northeast-2
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker image
+        run: |
+          IMAGE_URI=${{steps.login-ecr.outputs.registry}}/fastapi:latest
+          docker build -t $IMAGE_URI .
+
+      - name: push to ecr
+        run: |
+          IMAGE_URI=${{steps.login-ecr.outputs.registry}}/fastapi:latest
+          docker push $IMAGE_URI
+
+      - name: ssh into ec2 and deploy new image
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: 3.36.67.151
+          username: ec2-user
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            cd /home/ec2-user/api-app/
+            aws ecr get-login-password --region ap-northeast-2 \
+              | docker login --username AWS --password-stdin 816069131609.dkr.ecr.ap-northeast-2.amazonaws.com
+            docker-compose down -v
+            docker-compose pull
+            docker-compose up -d --build app
