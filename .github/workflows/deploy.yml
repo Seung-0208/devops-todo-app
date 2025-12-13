@@ -37,7 +37,7 @@ jobs:
       - name: ssh into ec2 and deploy new image
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: 3.36.67.151
+          host: 3.36.137.92
           username: ec2-user
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
