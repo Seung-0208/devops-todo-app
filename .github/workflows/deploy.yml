@@ -27,7 +27,11 @@ jobs:
       - name: Build Docker image
         run: |
           IMAGE_URI=${{steps.login-ecr.outputs.registry}}/fastapi:latest
-          docker build -t $IMAGE_URI .
+          
+          docker build \
+            -f fastapi-app/Dockerfile \   # Dockerfile 위치 지정
+            -t $IMAGE_URI \               # 태그(ECR URI)
+            fastapi-app  
 
       - name: push to ecr
         run: |
