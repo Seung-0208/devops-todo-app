@@ -46,4 +46,4 @@ jobs:
               | docker login --username AWS --password-stdin 298585300403.dkr.ecr.ap-northeast-2.amazonaws.com
             docker-compose down -v
             docker-compose pull
-            docker-compose up -d --build app
+            docker-compose up -d --build
