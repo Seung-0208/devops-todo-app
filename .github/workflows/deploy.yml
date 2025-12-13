@@ -43,7 +43,7 @@ jobs:
           script: |
             cd /home/ec2-user/api-app/
             aws ecr get-login-password --region ap-northeast-2 \
-              | docker login --username AWS --password-stdin 816069131609.dkr.ecr.ap-northeast-2.amazonaws.com
+              | docker login --username AWS --password-stdin 298585300403.dkr.ecr.ap-northeast-2.amazonaws.com
             docker-compose down -v
             docker-compose pull
             docker-compose up -d --build app
