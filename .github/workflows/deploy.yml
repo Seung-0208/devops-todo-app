@@ -38,10 +38,10 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: 3.36.137.92
-          username: ec2-user
+          username: ubuntu
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
-            cd /home/ec2-user/api-app/
+            cd /home/ubuntu/api-app/
             aws ecr get-login-password --region ap-northeast-2 \
               | docker login --username AWS --password-stdin 298585300403.dkr.ecr.ap-northeast-2.amazonaws.com
             docker-compose down -v

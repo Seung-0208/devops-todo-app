@@ -1,0 +1,7 @@
+services:
+  app:
+    image: 298585300403.dkr.ecr.ap-northeast-2.amazonaws.com/fastapi:latest
+    container_name: fastapi-workflow
+    restart: always
+    ports:
+      - "5123:5123"
